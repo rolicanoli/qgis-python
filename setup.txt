@@ -1,0 +1,22 @@
+# 1. To use PyQIS outside QGIS 3.16 we need to first run this in the Windows Command Prompt:
+
+set PYTHONPATH="C:\Program Files\QGIS 3.16.11\bin"
+set PATH="C:\Program Files\QGIS 2.18\bin";"C:\Program Files\QGIS 3.16.11";%PATH%
+
+# 2. In the Python QGIS Console we can create a point using this Python Script:
+
+layer =  QgsVectorLayer('Point?crs=epsg:4326', 'MyPoint' , "memory") # First, create a layer that is of the type geometry. Next, reference a data provider to accept the data source.
+pr = layer.dataProvider()
+pt = QgsFeature()
+point1 = QgsPointXY(20,20) #Then, create a generic feature object, followed by the point geometry.
+pt.setGeometry(QgsGeometry.fromPointXY(point1)) # Next, we add the feature to the layer via the underlying data provider, then add the layer to the map canvas.
+pr.addFeatures([pt]) #The layer type is memory, meaning that you can define the geometry and attributes in the code itself rather than an external data source. In this recipe, we just define the geometry and skip defining any attributes.
+layer.updateExtents()
+QgsProject.instance().addMapLayers([layer])
+
+#How it works...
+  This example uses a memory layer to avoid interacting with any data on either a disk or a network so as to keep things simple. Notice that when we declare the layer type, we add the parameter for the coordinate reference system (CRS) as EPSG:4326. Without this declaration, QGIS will prompt you to choose one. There are three parts, or levels, of abstraction even to create a single point on the map canvas, as shown here:
+  
+  
+ 
+  
